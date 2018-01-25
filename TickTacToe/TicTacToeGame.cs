@@ -18,6 +18,7 @@ namespace TickTacToe
             _player1Controller = player1Controller;
             _player2Controller = player2Controller;
             _board = new string[3, 3];
+            WinningState = WinningState.NoEmptySpaces;
         }
 
         public IController GetController(int playerNumber)

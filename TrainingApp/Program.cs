@@ -44,7 +44,30 @@ namespace net
                     
                     var netControllerTicTacToe = (NetControllerTicTacToe)game.GetController(winner);
 
-                    survivingNetworks.Add(netControllerTicTacToe.GetNetwork());
+                    
+                    switch (game.WinningState)
+                    {
+                        case WinningState.NoEmptySpaces:
+                            for (var i = 0; i < 10; i++)
+                            {
+                                survivingNetworks.Add(netControllerTicTacToe.GetNetwork());
+                            }
+                            break;
+
+                        case WinningState.Foul:
+                            for (var i = 0; i < 1; i++)
+                            {
+                                survivingNetworks.Add(netControllerTicTacToe.GetNetwork());
+                            }
+                            break;
+
+                        case WinningState.ThreeInARow:
+                            for (var i = 0; i < 20; i++)
+                            {
+                                survivingNetworks.Add(netControllerTicTacToe.GetNetwork());
+                            }
+                            break;
+                    }
                 }
 
                 evolutionManager.SurvivingNetworks(survivingNetworks);
