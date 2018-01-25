@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace TickTacToe
@@ -8,7 +9,9 @@ namespace TickTacToe
     {
         private IController _player1Controller;
         private IController _player2Controller;
-        private string[,] _board;
+        private readonly string[,] _board;
+
+        public WinningState WinningState { get; private set; }
 
         public TicTacToeGame(IController player1Controller, IController player2Controller)
         {
@@ -17,7 +20,20 @@ namespace TickTacToe
             _board = new string[3, 3];
         }
 
-        public void Draw()
+        public IController GetController(int playerNumber)
+        {
+            switch (playerNumber)
+            {
+                case 1:
+                    return _player1Controller;
+                case 2:
+                    return _player2Controller;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        private void Draw()
         {
             Console.SetCursorPosition(0,0);
             Console.Write($" {_board[0,0] ?? " "} | {_board[0,1] ?? " "} | {_board[0,2] ?? " "}" + Environment.NewLine +
@@ -44,10 +60,17 @@ namespace TickTacToe
                 {
                     _board[input.Item1, input.Item2] = playerToGo.PlayerNumber == 1 ? "O" : "X";
                     winner = CheckForWin(_board);
+                    if (winner != 0)
+                    {
+                        Draw();
+                        WinningState = WinningState.ThreeInARow;
+                        Console.WriteLine("3 in a row!");
+                    }
                 }
                 else
                 {
                     winner = playerToGo.PlayerNumber == 1 ? 2 : 1;
+                    WinningState = WinningState.Foul;
                 }
 
                 if (playerToGo.PlayerNumber == 1)
@@ -60,9 +83,8 @@ namespace TickTacToe
                     _player2Controller = playerToGo;
                     playerToGo = _player1Controller;
                 }
-                
-                Draw();
 
+                Draw();
                 i++;
             }
 

@@ -12,6 +12,8 @@ namespace net
         public readonly int OutputLayer;
         public readonly int InputLayer;
 
+        private readonly Random _random;
+
         public Node[][] Nodes { get; set; }
 
         public Node[] Inputs
@@ -28,6 +30,8 @@ namespace net
 
         public NeuralNetwork(int layers, int maxWidth, int inputs, int outputs)
         {
+            _random = new Random();
+
             Layers = layers;
             MaxWidth = maxWidth;
             InputLayer = 0;
@@ -70,6 +74,54 @@ namespace net
                     Nodes[layer][index].Value = (float) Math.Tanh(sum);
                 }
             }
+        }
+
+        public void AddNode( int layer, int index)
+        {
+            Nodes[layer][index] = new Node();
+        }
+
+        public void AddNode(int layer, int index, Node node)
+        {
+            Nodes[layer][index] = node;
+        }
+
+        public void AddConnection(float weight, int fromLayer, int fromIndex, int toLayer, int toIndex)
+        {
+            var toNode = Nodes[toLayer][toIndex] ?? new Node();
+
+
+            toNode.Connections.Add(new Connection
+            {
+                Weight = weight,
+                FromNodeLayerIndex = fromLayer,
+                FromNodeIndex = fromIndex
+            });
+            Nodes[toLayer][toIndex] = toNode;
+            Nodes[fromLayer][fromIndex] = Nodes[fromLayer][fromIndex] ?? new Node();
+        }
+
+        public void AddRandomConnection()
+        {
+            var fromLayer = _random.Next(0,OutputLayer+1);
+            var toLayer = _random.Next(0, OutputLayer + 1);
+            int fromIndex;
+            int toIndex;
+
+            if (fromLayer == InputLayer) fromIndex = _random.Next(Inputs.Length);
+            else if (fromLayer == OutputLayer) fromIndex = _random.Next(Outputs.Length);
+            else fromIndex = _random.Next(0, MaxWidth);
+
+            if (toLayer == InputLayer) toIndex = _random.Next(Inputs.Length);
+            else if (toLayer == OutputLayer) toIndex = _random.Next(Outputs.Length);
+            else toIndex = _random.Next(0, MaxWidth);
+
+            AddConnection(
+                weight: (float) (_random.NextDouble() * 2) - 1,
+                fromLayer: fromLayer,
+                fromIndex: fromIndex, 
+                toLayer: toLayer, 
+                toIndex: toIndex);
         }
     }
 }

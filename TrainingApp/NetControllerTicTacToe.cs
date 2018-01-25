@@ -8,10 +8,10 @@ namespace TrainingApp
 {
     public class NetControllerTicTacToe : IController
     {
-        private NeuralNetwork _network;
+        private readonly NeuralNetwork _network;
         private readonly int _thinkingTicks;
-        private string _playerLetter;
-        private string _oppostionLetter;
+        private readonly string _playerLetter;
+        private readonly string _oppostionLetter;
 
         public int Input { get; private set; }
         public int PlayerNumber { get; }
@@ -24,6 +24,8 @@ namespace TrainingApp
             _playerLetter = playerNumber == 1 ? "O" : "X";
             _oppostionLetter = playerNumber == 1 ? "X" : "O";
         }
+
+        public NeuralNetwork GetNetwork() => _network;
 
         public void UpdateInput(string[,] board)
         {
