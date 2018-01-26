@@ -52,8 +52,16 @@ namespace net
                 foreach (var game in games)
                 {
                     var winner = game.Play();
-                    
-                    var netControllerTicTacToe = (NetControllerTicTacToe)game.GetController(winner);
+
+                    NetControllerTicTacToe netControllerTicTacToe;
+                    if (winner != 0)
+                    {
+                        netControllerTicTacToe = (NetControllerTicTacToe)game.GetController(winner);
+                    }
+                    else
+                    {
+                        netControllerTicTacToe = (NetControllerTicTacToe)game.GetController(1);
+                    }
 
                     
                     switch (game.WinningState)
