@@ -67,7 +67,7 @@ namespace net
                     switch (game.WinningState)
                     {
                         case WinningState.NoEmptySpaces:
-                            for (var i = 0; i < 10; i++)
+                            for (var i = 0; i < 2; i++)
                             {
                                 survivingNetworks.Add(netControllerTicTacToe.GetNetwork());
                             }
@@ -83,7 +83,7 @@ namespace net
                             break;
 
                         case WinningState.ThreeInARow:
-                            for (var i = 0; i < 20; i++)
+                            for (var i = 0; i < 2; i++)
                             {
                                 survivingNetworks.Add(netControllerTicTacToe.GetNetwork());
                             }
